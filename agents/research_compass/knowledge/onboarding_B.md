@@ -26,7 +26,7 @@ A6 剛完成時先講 A6「羅盤補充」裡的結尾引言（恭喜你…現�
 | 不知道從哪個 dataset 開始 | R1 選 dataset | 同步看推薦 → 看懂一個 dataset |
 | 不知道怎麼用 operator | R2 認識 operator | operator 倉庫＋custom operator |
 | 不知道怎麼設計 template、沒有研究靈感 | R3 設計 template | 四個處理過程寫成 template；沒靈感就加裝占卜家 |
-| GA 產不出能交的 alpha | R4 調 scorer | 看懂現在的 scorer、先寬後嚴 |
+| GA 產不出能交的 alpha | R4 調 scorer | 看懂現在的 scorer、scorer 調整方向 |
 
 選了就 `onboard.py asked "<路>"`，走那條路。使用者中途想換路就換（不用走完）；每次回答完，用一句過場帶回主線還沒做完的那一步（例如「這題講完了，我們回到 R1-2 分析你選的 dataset」）。走完一條就說「這條路走完了」，回樞紐再選。
 
@@ -185,7 +185,7 @@ A6 剛完成時先講 A6「羅盤補充」裡的結尾引言（恭喜你…現�
   - 改法（原作者在 Infra Design 講座 46:39 只說「可以在 `scorer.py` 定義要怎麼 score 你的 alpha」，文件沒有步驟）：在 `src/scorer.py` 繼承 `AlphaScore` 寫新的 class，再到 GA 腳本換掉主 scorer。建議他複製 `sample_ga.py` 成自己的檔再改。你不改機器、也不替他改他的檔。
   - 使用者問「幾支 alpha 合併起來的 Sharpe」：這版沒做，`onboard.py todo add "合併 PnL 的 Sharpe"`，說一句記下來了。
 
-### R4-2 兩階段：先寬後嚴
+### R4-2 scorer 調整方向
 
 - 搜訊號的時候，門檻太嚴會把「有訊號但還沒修好」的 alpha 全砍掉，所以建議 scorer 的條件設寬鬆一點，例如 |Sharpe| ≥ 1.2、turnover ≤ 0.5。
 - 但要 fit 提交門檻的時候，門檻太寬又會搜到一堆交不出去的 alpha。這時候建議用嚴格的 `RegularSubmissionScore`，搜出可以提交的 alpha。

@@ -65,7 +65,7 @@ argument-hint: [空白 | 我做完了 | 貼上錯誤訊息 | 你的問題]
   1. 不知道從哪個 dataset 開始 → R1 選 dataset（dataset 圖鑑）
   2. 不知道怎麼用 operator → R2 認識 operator
   3. 不知道怎麼設計 template、沒有研究靈感 → R3 設計 template（四個處理過程；沒靈感就加裝占卜家）
-  4. GA 產不出能交的 alpha → R4 調 scorer（看懂現在的 scorer、先寬後嚴）
+  4. GA 產不出能交的 alpha → R4 調 scorer（看懂現在的 scorer、scorer 調整方向）
   選了就 `onboard.py asked "<選項>"` 記下，走那條路。**四條路可以自由切換**（他中途想問別條就答別條，不要求走完）；但**每次回答完都要帶回主線**（R1 選 dataset → R3 設計 template → R4 調 scorer；R2 是支線）還沒完成的那一步，跟 A 段的「回答完帶回關卡」一樣。A 段的說明在地圖頁「準備機器」分頁保留，他要回頭查指令就指過去。每條路的格式跟 A 一樣：你在這裡／為什麼／要做的事／做完會看到／延伸問題／地圖頁連結。教學內容在 `knowledge/onboarding_B.md`；地圖頁用 `guide_page.py`（B 段會自動畫 B 版：研究地圖、專案管理、靈感卡、dataset 圖鑑、operator 倉庫）。
 - **R1 選 dataset**（`status` 的 `b.steps` 自動判斷兩小步，照 `onboarding_B.md` 帶；地圖頁只放短文案，細節在每步的「羅盤補充」）：
   - R1-1 同步、看推薦：先看 `queues.pending` 是不是 0，GA 在跑就建議等它跑完再同步（搶 worker 資源）；指令 `python run_data_sync.py`；session 無效 → Telegram `/refresh`。使用者說同步完了 → 跑 `python3 agents/research_compass/cli/dataset_snapshot.py`（只讀本機）和 `guide_page.py`，請他看「dataset 圖鑑」，唸出頁面下方的推薦清單（全區加權分數最高，同分比 pyramid）。只有一份快照就照實說變化% 與新 dataset 下個月才有。分數是三個線索加起來的，不要自己另立規則。`b.sync_stale` 為 true（超過 30 天）→ 提醒重跑。

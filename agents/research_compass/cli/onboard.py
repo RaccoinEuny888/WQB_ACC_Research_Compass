@@ -158,7 +158,7 @@ ROUTES = [("R1", "選 dataset"), ("R2", "認識 operator"), ("R3", "設計 templ
 ROUTE_STEPS = {
     "R2": [("R2-1", "operator 倉庫"), ("R2-2", "custom operator")],
     "R3": [("R3-1", "template 怎麼設計"), ("R3-2", "加裝占卜家"), ("R3-3", "用 /hypothesis 建第一張假說卡")],
-    "R4": [("R4-1", "看懂現在的 scorer"), ("R4-2", "兩階段：先寬後嚴")],
+    "R4": [("R4-1", "看懂現在的 scorer"), ("R4-2", "scorer 調整方向")],
 }
 SUBDATASET = paths.OM.DATA / "subdataset"
 
