@@ -73,7 +73,7 @@ agents/
 │                                      # ga_tips、ga_template_design、examples/、operators.json、operator_subgroups.json（v4+）、sources.md
 ├── hypothesis_seer/   SEER.md  skills/{hypothesis,papers,express,templatize}  cli/{pick_fields,build_idea}.py
 ├── expression_inquisitor/  AGENT.md  skills/judge  cli/{blind_pack,result_pack,template_check}.py
-├── research_compass/  skills/{research-compass,dataset-profile,operator-classify}  scorers.py  cli/{onboard,guide_page,dataset_snapshot,operator_index,template_draft,dedup}.py  knowledge/
+├── research_compass/  skills/{research-compass,dataset-profile,operator-classify}  cli/{onboard,guide_page,dataset_snapshot,operator_index,template_draft,dedup}.py  knowledge/
 └── workspace/         cache/ index/ dashboard/ compass_profile.json
 ```
 

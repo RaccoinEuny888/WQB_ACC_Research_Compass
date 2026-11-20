@@ -188,13 +188,13 @@ A6 剛完成時先講 A6「羅盤補充」裡的結尾引言（恭喜你…現�
 ### R4-2 scorer 調整方向
 
 - 搜訊號的時候，門檻太嚴會把「有訊號但還沒修好」的 alpha 全砍掉，所以建議 scorer 的條件設寬鬆一點，例如 |Sharpe| ≥ 1.2、turnover ≤ 0.5。
-- 但要 fit 提交門檻的時候，門檻太寬又會搜到一堆交不出去的 alpha。這時候建議用嚴格的 `RegularSubmissionScore`，搜出可以提交的 alpha。
+- 但要 fit 提交門檻的時候，門檻太寬又會搜到一堆交不出去的 alpha。這時候建議把 scorer 改嚴格，照提交門檻打分，搜出可以提交的 alpha。
 - 完成判斷：看過就算完成，羅盤講完就 `onboard.py mark R4-2`。
 - 推薦文章：
   - ↳ [Q2 GLB Challenge] 60 and Above GLB Alpha in One Qurter: Multi-Country Data Processing and Research Pipeline – WorldQuant BRAIN
 - 羅盤補充：只在對話裡用，不上地圖頁。
-  - 寫好的三個 scorer 在 `agents/research_compass/scorers.py`：`SignalScore`（探索：|Sharpe| ≥ 1.2、turnover ≤ 0.5，`[L]` 2-step GA 文章的建議）、`RegularSubmissionScore`（正規提交：Sharpe ≥ 1.58、fitness ≥ 1.0、turnover ≤ 0.7，再看 7 項 check）、`PowerPoolScore`（Sharpe ≥ 1.0 `[?]`、7 項無 FAIL）。門檻是使用者帳號實測 `[R]`，模擬結果裡有 limit 時用 limit。
-  - 使用者要換：複製 `sample_ga.py` 成自己的檔，改兩行：`from agents.research_compass.scorers import SignalScore, RegularSubmissionScore, PowerPoolScore`、`score_scorer = RegularSubmissionScore`。只印這兩行給他，他自己改。
+  - 門檻參考：探索用 |Sharpe| ≥ 1.2、turnover ≤ 0.5（`[L]` 2-step GA 文章的建議）；正規提交 Sharpe ≥ 1.58、fitness ≥ 1.0、turnover ≤ 0.7，再看 7 項 check；Power Pool Sharpe ≥ 1.0 `[?]`、7 項無 FAIL。門檻是使用者帳號實測 `[R]`，見 `knowledge/checks_guide.md`。
+  - 使用者想換：照 R4-1 補充的做法，在 `src/scorer.py` 繼承 `AlphaScore` 寫自己的 class，再到自己複製的 GA 腳本換掉主 scorer。羅盤只講做法和門檻，不替他寫、不改他的檔。
   - 提交階段的 scorer 用原始 Sharpe，負 Sharpe 會被扣分；template 沒有正負號基因位的話，要提醒他第一階段的方向先定好。
   - 兩階段的精神來自論壇文章「2-step GA」`[L]`：第一次 template 只放跟 idea 有關的層、GA 偏探索；第二次加上優化層、GA 偏收斂，跑完用 A6 的 `sample_alphalist_parser.py` 看能交幾支。只拿它講「寬 vs 嚴」，不展開成整套教學。
   - 走完 R4 就是主線走完；回樞紐，之後他每條新研究都照 R1 → R3 → R4 走。四條路全部走完，地圖頁的「新手地圖」分頁會消失，頁面從「專案管理」開始。

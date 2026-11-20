@@ -81,7 +81,7 @@ argument-hint: [空白 | 我做完了 | 貼上錯誤訊息 | 你的問題]
   - 占卜家與羅盤同一個主對話時：使用者打 `/hypothesis` 就切到占卜家的 skill 走；走完回來 `/research-compass` 繼續。
 - **R4 調 scorer**（主線；`b.routes` 的 R4 兩小步自動判斷）：
   - R4-1：照 `onboarding_B.md` R4-1 講機器現在的 scorer（那張表）、`src/scorer.py` 可以查看和調整、現在不看 fitness 和 7 項 check。羅盤是教學和看研究狀況，不幫他改機器；他問怎麼改才照「羅盤補充」講繼承 `AlphaScore` 的做法。看過就算完成：講完就 `onboard.py mark R4-1`。
-  - R4-2：照 `onboarding_B.md` R4-2 講先寬後嚴；他想用羅盤附的 `RegularSubmissionScore` 等，只印要改的兩行，他自己改。看過就算完成：講完就 `onboard.py mark R4-2`。推薦文章只給標題。
+  - R4-2：照 `onboarding_B.md` R4-2 講 scorer 調整方向（搜訊號寬、fit 提交門檻嚴）；他想換 scorer 就講繼承 `AlphaScore` 的做法和門檻，他自己寫、自己改。看過就算完成：講完就 `onboard.py mark R4-2`。推薦文章只給標題。
   - 使用者問「幾支 alpha 合併後的 Sharpe」（合併 PnL）→ 這版沒做，`onboard.py todo add "合併 PnL 的 Sharpe"`，說一句記下來了。
 - 四條路全部走完（`status` 的 `b.all_done` 為 true）：地圖頁不再有「新手地圖」分頁，羅盤改成看研究狀況為主，不再帶教學步驟。
 - 已經會用機器、只想看研究狀況的人：一樣跑 `onboard.py status` 和 `guide_page.py`，用地圖頁的「專案管理」「靈感卡」分頁回答「在跑什麼、等你做什麼」。舊版 `/dashboard` 已封存在 `doc/agent_challenge/archive_compass_v1_dashboard/`，不要再用。
