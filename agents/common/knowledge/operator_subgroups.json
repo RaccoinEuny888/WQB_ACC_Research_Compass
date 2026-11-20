@@ -1,0 +1,749 @@
+{
+  "_source": "Operator Subgroup 分類.md（v4, 2026-07-06）",
+  "_note": "operator_to_subgroup 取主要歸屬（md 中第一次出現）。同 subgroup 的 operator 語意功能相近且運算結構相同，可在 template 槽位互換。 ｜v4+（2026-11-15，使用者裁定 [R]）：2.6e 拆成 2.6e neut 與 2.6f proj——依「橫看成嶺側成峰」實證，neut（垂直）與 proj（平行）意義差距顯著，不可互換。",
+  "subgroups": {
+    "1.1a": {
+      "module": "data_cleaning",
+      "name": "時序回補 Time-series Backfill",
+      "structure": "x + lookback d + 位置參數 k",
+      "operators": [
+        "ts_backfill",
+        "kth_element"
+      ]
+    },
+    "1.1b": {
+      "module": "data_cleaning",
+      "name": "分組回補",
+      "structure": "含 lookback）Group Backfill with Lookback（x + group + d",
+      "operators": [
+        "group_backfill"
+      ]
+    },
+    "1.1c": {
+      "module": "data_cleaning",
+      "name": "分組回補",
+      "structure": "無 lookback）Group Backfill without Lookback（x + weight + group",
+      "operators": [
+        "group_extra"
+      ]
+    },
+    "1.1d": {
+      "module": "data_cleaning",
+      "name": "缺值計數 Missing Value Count",
+      "structure": "x + lookback d，無位置參數 k",
+      "operators": [
+        "ts_count_nans"
+      ]
+    },
+    "1.1e": {
+      "module": "data_cleaning",
+      "name": "缺值遮罩 Missing Value Mask",
+      "structure": "x + 參照 y，無 lookback",
+      "operators": [
+        "nan_mask"
+      ]
+    },
+    "1.1f": {
+      "module": "data_cleaning",
+      "name": "缺值偵測 Missing Value Detection",
+      "structure": "單一輸入，無參數",
+      "operators": [
+        "is_nan",
+        "is_not_nan"
+      ]
+    },
+    "1.2a": {
+      "module": "data_cleaning",
+      "name": "兩變數相除 Two-variable Division",
+      "structure": "無參數",
+      "operators": [
+        "divide"
+      ]
+    },
+    "1.2b": {
+      "module": "data_cleaning",
+      "name": "單變數線性縮放 Single-variable Linear Scaling",
+      "structure": "x + 1 個常數",
+      "operators": [
+        "scale_down"
+      ]
+    },
+    "1.3a": {
+      "module": "data_cleaning",
+      "name": "單參數縮尾 Single-parameter Winsorization",
+      "structure": "x + 1 個連續縮尾參數",
+      "operators": [
+        "winsorize"
+      ],
+      "_note": "2026-07-27 移除 truncate：與 winsorize 的 keyword 參數名不同（std vs maxPercent）且數值量級不同（2-4 vs 0.01-0.05），templatizer 只把 keyword 名寫死抄自原始 operator，GA 選到 truncate 會產生 truncate(x, std=N) 這種非法呼叫。truncate 的裁尾功能與 setting 層級的 truncation 設定重複，移除不影響搜索空間的實質價值。"
+    },
+    "1.3b": {
+      "module": "data_cleaning",
+      "name": "單邊界裁切 Single-bound Clipping",
+      "structure": "x + 1 個邊界值",
+      "operators": [
+        "left_tail",
+        "right_tail"
+      ]
+    },
+    "1.3c": {
+      "module": "data_cleaning",
+      "name": "雙邊界縮尾／區間處理 Two-bound Clipping",
+      "structure": "x + lower + upper，各自多一個輸出替代規則",
+      "operators": [
+        "nan_out",
+        "tail",
+        "clamp"
+      ]
+    },
+    "1.4a": {
+      "module": "data_cleaning",
+      "name": "無參數標準化 Parameter-free Standardization",
+      "structure": "x",
+      "operators": [
+        "zscore"
+      ]
+    },
+    "1.4b": {
+      "module": "data_cleaning",
+      "name": "含參數標準化／排序前處理 Parameterized Rank / Zscore Preprocessing",
+      "structure": "x + 參數，cross-sectional",
+      "operators": [
+        "rank",
+        "quantile",
+        "normalize"
+      ]
+    },
+    "1.5a": {
+      "module": "data_cleaning",
+      "name": "無參數異常值清理 Parameter-free Outlier Cleaning",
+      "structure": "x",
+      "operators": [
+        "purify",
+        "pasteurize"
+      ]
+    },
+    "1.5b": {
+      "module": "data_cleaning",
+      "name": "指定值替換 Target Value Replacement",
+      "structure": "x + target/dest 對照表",
+      "operators": [
+        "replace"
+      ]
+    },
+    "1.5c": {
+      "module": "data_cleaning",
+      "name": "異常值偵測 Abnormal Value Detection",
+      "structure": "單一輸入，無參數",
+      "operators": [
+        "is_finite",
+        "is_not_finite"
+      ]
+    },
+    "1.5d": {
+      "module": "data_cleaning",
+      "name": "指定值轉換 Value-to-NaN Conversion",
+      "structure": "x + 1 個比較值",
+      "operators": [
+        "to_nan"
+      ]
+    },
+    "2.1a": {
+      "module": "signal_extraction",
+      "name": "單變數非線性轉換 Unary Nonlinear Transform",
+      "structure": "無參數",
+      "operators": [
+        "abs",
+        "sign",
+        "log",
+        "sqrt",
+        "s_log_1p",
+        "inverse"
+      ]
+    },
+    "2.1b": {
+      "module": "signal_extraction",
+      "name": "冪次轉換 Power Transform",
+      "structure": "x + 指數參數 y",
+      "operators": [
+        "power",
+        "signed_power"
+      ]
+    },
+    "2.2a": {
+      "module": "signal_extraction",
+      "name": "固定一階差分 Fixed One-period Difference",
+      "structure": "無 lookback",
+      "operators": [
+        "log_diff"
+      ]
+    },
+    "2.2b": {
+      "module": "signal_extraction",
+      "name": "時序差分／延遲 Time-series Difference & Delay",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_delta",
+        "ts_returns",
+        "ts_delay",
+        "ts_av_diff",
+        "last_diff_value"
+      ]
+    },
+    "2.3a": {
+      "module": "signal_extraction",
+      "name": "時序極值與價差 Time-series Extremes & Spread",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_max",
+        "ts_min",
+        "ts_max_diff",
+        "ts_min_diff",
+        "ts_min_max_diff",
+        "ts_min_max_cps"
+      ]
+    },
+    "2.3b": {
+      "module": "signal_extraction",
+      "name": "兩變數相減 Two-variable Subtraction",
+      "structure": "無 lookback",
+      "operators": [
+        "subtract"
+      ]
+    },
+    "2.4a": {
+      "module": "signal_extraction",
+      "name": "無參數新鮮度訊號 Parameter-free Freshness Signal",
+      "structure": "x",
+      "operators": [
+        "days_from_last_change"
+      ]
+    },
+    "2.4b": {
+      "module": "signal_extraction",
+      "name": "時序極值發生位置 Time-series Argmax / Argmin",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_arg_max",
+        "ts_arg_min"
+      ]
+    },
+    "2.5": {
+      "module": "signal_extraction",
+      "name": "時序波動與統計矩 Time-series Volatility & Moment Signal",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_std_dev",
+        "ts_kurtosis",
+        "ts_skewness",
+        "ts_moment",
+        "ts_entropy",
+        "ts_ir"
+      ]
+    },
+    "2.6a": {
+      "module": "signal_extraction",
+      "name": "雙變數時序相關／共變異 Pairwise Time-series Correlation & Co-moment",
+      "structure": "x, y + lookback d",
+      "operators": [
+        "ts_corr",
+        "ts_covariance",
+        "ts_co_skewness",
+        "ts_co_kurtosis"
+      ]
+    },
+    "2.6b": {
+      "module": "signal_extraction",
+      "name": "三變數時序相關 Three-variable Time-series Correlation",
+      "structure": "x, y, z + lookback d",
+      "operators": [
+        "ts_partial_corr",
+        "ts_triple_corr"
+      ]
+    },
+    "2.6c": {
+      "module": "signal_extraction",
+      "name": "雙變數時序迴歸／投影關係 Pairwise Time-series Regression & Projection",
+      "structure": "x, y + lookback d",
+      "operators": [
+        "ts_theilsen",
+        "ts_poly_regression",
+        "ts_regression",
+        "ts_vector_proj",
+        "ts_vector_neut"
+      ]
+    },
+    "2.6d": {
+      "module": "signal_extraction",
+      "name": "多變數迴歸 Multi-variable Regression",
+      "structure": "y + 多個 x，variadic，可選 lookback",
+      "operators": [
+        "multi_regression"
+      ]
+    },
+    "2.6e": {
+      "module": "signal_extraction",
+      "name": "雙變數截面正交化 Pairwise Cross-sectional Neutralization（垂直分量）",
+      "structure": "x, y，無 lookback，橫斷面；回傳殘差（去掉 y 方向的分量）",
+      "operators": [
+        "regression_neut",
+        "vector_neut"
+      ]
+    },
+    "2.6f": {
+      "module": "signal_extraction",
+      "name": "雙變數截面投影 Pairwise Cross-sectional Projection（平行分量）",
+      "structure": "x, y，無 lookback，橫斷面；回傳投影（保留 y 方向的分量）",
+      "operators": [
+        "regression_proj",
+        "vector_proj"
+      ]
+    },
+    "2.7a": {
+      "module": "signal_extraction",
+      "name": "單變數排序複合訊號 Single-variable Rank Composite",
+      "structure": "x + 參數 m",
+      "operators": [
+        "generalized_rank"
+      ]
+    },
+    "2.7b": {
+      "module": "signal_extraction",
+      "name": "多變數排序複合訊號－截面 Multi-variable Rank Composite, Cross-sectional",
+      "structure": "variadic，無 lookback",
+      "operators": [
+        "rank_gmean_amean_diff"
+      ]
+    },
+    "2.7c": {
+      "module": "signal_extraction",
+      "name": "多變數排序複合訊號－時序 Multi-variable Rank Composite, Time-series",
+      "structure": "variadic + lookback d",
+      "operators": [
+        "ts_rank_gmean_amean_diff"
+      ]
+    },
+    "2.8": {
+      "module": "signal_extraction",
+      "name": "時序排序與正規化 Time-series Rank & Normalization",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_rank",
+        "ts_quantile",
+        "ts_scale",
+        "ts_zscore"
+      ]
+    },
+    "2.9": {
+      "module": "signal_extraction",
+      "name": "非線性轉換 Nonlinear Transform",
+      "structure": "訊號塑形，無參數",
+      "operators": [
+        "exp",
+        "sigmoid",
+        "tanh",
+        "arc_cos",
+        "arc_sin",
+        "arc_tan"
+      ]
+    },
+    "3.1a": {
+      "module": "smoothing_turnover",
+      "name": "衰減平滑",
+      "structure": "含 lookback）Decay Smoothing with Lookback（x + lookback d，短 d 用法",
+      "operators": [
+        "ts_decay_linear"
+      ]
+    },
+    "3.1b": {
+      "module": "smoothing_turnover",
+      "name": "權重／門檻式平滑",
+      "structure": "無 lookback）Weight/Threshold-based Smoothing（x + 1 個比例參數，無 lookback",
+      "operators": [
+        "ts_weighted_decay",
+        "hump"
+      ]
+    },
+    "3.2": {
+      "module": "smoothing_turnover",
+      "name": "慢速平滑 Slow Smoothing",
+      "structure": "x + lookback d，長窗，穩定但可能稀釋訊號",
+      "operators": [
+        "ts_mean",
+        "ts_median",
+        "ts_percentage",
+        "ts_decay_exp_window",
+        "ts_sum",
+        "ts_product"
+      ]
+    },
+    "3.3a": {
+      "module": "smoothing_turnover",
+      "name": "含 lookback 衰減 Decay with Lookback",
+      "structure": "x + lookback d",
+      "operators": [
+        "ts_decay_linear",
+        "ts_decay_exp_window",
+        "jump_decay"
+      ]
+    },
+    "3.3b": {
+      "module": "smoothing_turnover",
+      "name": "無 lookback 衰減 Decay without Lookback",
+      "structure": "x + 1 個比例參數",
+      "operators": [
+        "hump_decay",
+        "ts_weighted_decay"
+      ]
+    },
+    "3.3c": {
+      "module": "smoothing_turnover",
+      "name": "自訂濾波係數 Custom Filter Coefficients",
+      "structure": "x + 係數字串，無固定 lookback",
+      "operators": [
+        "filter"
+      ]
+    },
+    "3.4a": {
+      "module": "smoothing_turnover",
+      "name": "單變數換手目標調整 Single-variable Turnover Targeting",
+      "structure": "x + 換手參數組，無 lookback",
+      "operators": [
+        "ts_target_tvr_decay",
+        "ts_target_tvr_hump"
+      ]
+    },
+    "3.4b": {
+      "module": "smoothing_turnover",
+      "name": "雙變數換手目標調整／限制 Two-variable Turnover Targeting & Limiting",
+      "structure": "x, y + 換手參數組，無 lookback",
+      "operators": [
+        "ts_target_tvr_delta_limit",
+        "ts_delta_limit"
+      ]
+    },
+    "3.4c": {
+      "module": "smoothing_turnover",
+      "name": "條件維持前值 Conditional Hold",
+      "structure": "x, 條件 f + 期間 period",
+      "operators": [
+        "keep"
+      ]
+    },
+    "3.4d": {
+      "module": "smoothing_turnover",
+      "name": "條件式交易觸發 Conditional Trade Trigger",
+      "structure": "x, y, z，無額外參數",
+      "operators": [
+        "trade_when"
+      ]
+    },
+    "3.4e": {
+      "module": "smoothing_turnover",
+      "name": "換手率量測 Turnover Measurement",
+      "structure": "x + lookback d",
+      "operators": [
+        "inst_tvr"
+      ]
+    },
+    "4.1a": {
+      "module": "group_operation",
+      "name": "數值分桶 Value Bucketing",
+      "structure": "x + 分桶規則",
+      "operators": [
+        "bucket"
+      ]
+    },
+    "4.1b": {
+      "module": "group_operation",
+      "name": "單一分組壓縮 Group Densification",
+      "structure": "group 輸入，無參數",
+      "operators": [
+        "densify"
+      ]
+    },
+    "4.1c": {
+      "module": "group_operation",
+      "name": "雙分組合併 Two-group Merge",
+      "structure": "g1, g2",
+      "operators": [
+        "group_cartesian_product"
+      ]
+    },
+    "4.1d": {
+      "module": "group_operation",
+      "name": "多分組序列合併 Sequential Multi-group Coalescing",
+      "structure": "original_group + 多個備援 group，variadic",
+      "operators": [
+        "group_coalesce"
+      ]
+    },
+    "4.2": {
+      "module": "group_operation",
+      "name": "組內標準化 Standardization",
+      "structure": "x + group",
+      "operators": [
+        "group_neutralize",
+        "group_zscore",
+        "group_rank",
+        "group_scale",
+        "group_normalize"
+      ]
+    },
+    "4.3a": {
+      "module": "group_operation",
+      "name": "組內聚合統計 Group Aggregation",
+      "structure": "x + group，無額外輸入",
+      "operators": [
+        "group_median",
+        "group_sum",
+        "group_max",
+        "group_min",
+        "group_count",
+        "group_std_dev",
+        "group_percentage"
+      ]
+    },
+    "4.3b": {
+      "module": "group_operation",
+      "name": "加權組內聚合 Weighted Group Aggregation",
+      "structure": "x + weight + group",
+      "operators": [
+        "group_mean"
+      ]
+    },
+    "4.4": {
+      "module": "group_operation",
+      "name": "投影／正交化 Projection",
+      "structure": "",
+      "operators": [
+        "group_vector_neut",
+        "group_vector_proj"
+      ]
+    },
+    "4.5": {
+      "module": "group_operation",
+      "name": "多因子轉換 Multi-factor Transformation",
+      "structure": "",
+      "operators": [
+        "group_multi_regression",
+        "scale",
+        "one_side",
+        "rank_by_side"
+      ]
+    },
+    "6.1a": {
+      "module": "utility",
+      "name": "多變數加總／相乘／比大小 Variadic Arithmetic",
+      "structure": "variadic，無 lookback",
+      "operators": [
+        "add",
+        "multiply",
+        "max",
+        "min"
+      ]
+    },
+    "6.1b": {
+      "module": "utility",
+      "name": "單變數取整／符號處理 Unary Rounding & Sign",
+      "structure": "無參數",
+      "operators": [
+        "ceiling",
+        "floor",
+        "round",
+        "fraction",
+        "reverse"
+      ]
+    },
+    "6.1c": {
+      "module": "utility",
+      "name": "單變數取整",
+      "structure": "含參數）Unary Rounding with Parameter（x + f",
+      "operators": [
+        "round_down"
+      ]
+    },
+    "6.2": {
+      "module": "utility",
+      "name": "邏輯與比較 Logical & Comparison",
+      "structure": "",
+      "operators": [
+        "and",
+        "or",
+        "not",
+        "negate",
+        "if_else"
+      ]
+    },
+    "6.3": {
+      "module": "utility",
+      "name": "Combo / Selection 專屬",
+      "structure": "本次比賽不適用，因只計算單一 Python Alpha",
+      "operators": [
+        "combo_a",
+        "generate_stats",
+        "self_corr"
+      ]
+    },
+    "6.4": {
+      "module": "utility",
+      "name": "特殊／資料相依工具 Special / Data-dependent Utility",
+      "structure": "",
+      "operators": [
+        "convert",
+        "inst_pnl",
+        "ts_step"
+      ]
+    }
+  },
+  "operator_to_subgroup": {
+    "ts_backfill": "1.1a",
+    "kth_element": "1.1a",
+    "group_backfill": "1.1b",
+    "group_extra": "1.1c",
+    "ts_count_nans": "1.1d",
+    "nan_mask": "1.1e",
+    "is_nan": "1.1f",
+    "is_not_nan": "1.1f",
+    "divide": "1.2a",
+    "scale_down": "1.2b",
+    "winsorize": "1.3a",
+    "left_tail": "1.3b",
+    "right_tail": "1.3b",
+    "nan_out": "1.3c",
+    "tail": "1.3c",
+    "clamp": "1.3c",
+    "zscore": "1.4a",
+    "rank": "1.4b",
+    "quantile": "1.4b",
+    "normalize": "1.4b",
+    "purify": "1.5a",
+    "pasteurize": "1.5a",
+    "replace": "1.5b",
+    "is_finite": "1.5c",
+    "is_not_finite": "1.5c",
+    "to_nan": "1.5d",
+    "abs": "2.1a",
+    "sign": "2.1a",
+    "log": "2.1a",
+    "sqrt": "2.1a",
+    "s_log_1p": "2.1a",
+    "inverse": "2.1a",
+    "power": "2.1b",
+    "signed_power": "2.1b",
+    "log_diff": "2.2a",
+    "ts_delta": "2.2b",
+    "ts_returns": "2.2b",
+    "ts_delay": "2.2b",
+    "ts_av_diff": "2.2b",
+    "last_diff_value": "2.2b",
+    "ts_max": "2.3a",
+    "ts_min": "2.3a",
+    "ts_max_diff": "2.3a",
+    "ts_min_diff": "2.3a",
+    "ts_min_max_diff": "2.3a",
+    "ts_min_max_cps": "2.3a",
+    "subtract": "2.3b",
+    "days_from_last_change": "2.4a",
+    "ts_arg_max": "2.4b",
+    "ts_arg_min": "2.4b",
+    "ts_std_dev": "2.5",
+    "ts_kurtosis": "2.5",
+    "ts_skewness": "2.5",
+    "ts_moment": "2.5",
+    "ts_entropy": "2.5",
+    "ts_ir": "2.5",
+    "ts_corr": "2.6a",
+    "ts_covariance": "2.6a",
+    "ts_co_skewness": "2.6a",
+    "ts_co_kurtosis": "2.6a",
+    "ts_partial_corr": "2.6b",
+    "ts_triple_corr": "2.6b",
+    "ts_theilsen": "2.6c",
+    "ts_poly_regression": "2.6c",
+    "ts_regression": "2.6c",
+    "ts_vector_proj": "2.6c",
+    "ts_vector_neut": "2.6c",
+    "multi_regression": "2.6d",
+    "regression_neut": "2.6e",
+    "regression_proj": "2.6f",
+    "vector_neut": "2.6e",
+    "vector_proj": "2.6f",
+    "generalized_rank": "2.7a",
+    "rank_gmean_amean_diff": "2.7b",
+    "ts_rank_gmean_amean_diff": "2.7c",
+    "ts_rank": "2.8",
+    "ts_quantile": "2.8",
+    "ts_scale": "2.8",
+    "ts_zscore": "2.8",
+    "exp": "2.9",
+    "sigmoid": "2.9",
+    "tanh": "2.9",
+    "arc_cos": "2.9",
+    "arc_sin": "2.9",
+    "arc_tan": "2.9",
+    "ts_decay_linear": "3.1a",
+    "ts_weighted_decay": "3.1b",
+    "hump": "3.1b",
+    "ts_mean": "3.2",
+    "ts_median": "3.2",
+    "ts_percentage": "3.2",
+    "ts_decay_exp_window": "3.2",
+    "ts_sum": "3.2",
+    "ts_product": "3.2",
+    "jump_decay": "3.3a",
+    "hump_decay": "3.3b",
+    "filter": "3.3c",
+    "ts_target_tvr_decay": "3.4a",
+    "ts_target_tvr_hump": "3.4a",
+    "ts_target_tvr_delta_limit": "3.4b",
+    "ts_delta_limit": "3.4b",
+    "keep": "3.4c",
+    "trade_when": "3.4d",
+    "inst_tvr": "3.4e",
+    "bucket": "4.1a",
+    "densify": "4.1b",
+    "group_cartesian_product": "4.1c",
+    "group_coalesce": "4.1d",
+    "group_neutralize": "4.2",
+    "group_zscore": "4.2",
+    "group_rank": "4.2",
+    "group_scale": "4.2",
+    "group_normalize": "4.2",
+    "group_median": "4.3a",
+    "group_sum": "4.3a",
+    "group_max": "4.3a",
+    "group_min": "4.3a",
+    "group_count": "4.3a",
+    "group_std_dev": "4.3a",
+    "group_percentage": "4.3a",
+    "group_mean": "4.3b",
+    "group_vector_neut": "4.4",
+    "group_vector_proj": "4.4",
+    "group_multi_regression": "4.5",
+    "scale": "4.5",
+    "one_side": "4.5",
+    "rank_by_side": "4.5",
+    "add": "6.1a",
+    "multiply": "6.1a",
+    "max": "6.1a",
+    "min": "6.1a",
+    "ceiling": "6.1b",
+    "floor": "6.1b",
+    "round": "6.1b",
+    "fraction": "6.1b",
+    "reverse": "6.1b",
+    "round_down": "6.1c",
+    "and": "6.2",
+    "or": "6.2",
+    "not": "6.2",
+    "negate": "6.2",
+    "if_else": "6.2",
+    "combo_a": "6.3",
+    "generate_stats": "6.3",
+    "self_corr": "6.3",
+    "convert": "6.4",
+    "inst_pnl": "6.4",
+    "ts_step": "6.4"
+  }
+}

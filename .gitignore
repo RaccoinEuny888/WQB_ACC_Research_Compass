@@ -1,0 +1,9 @@
+# 使用者自己機器上產生的東西，不要進版控
+agents/workspace/*
+!agents/workspace/.gitkeep
+__pycache__/
+*.pyc
+.DS_Store
+# 帳密與登入紀錄
+.env
+*.pkl

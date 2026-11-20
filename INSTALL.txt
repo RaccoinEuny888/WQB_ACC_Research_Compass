@@ -1,0 +1,12 @@
+Research Compass（研究進度羅盤）— 獨立可用，不需要另外兩支
+
+1. 把 agents/ 整個資料夾放到你的 open machine 根目錄（和 src/、DB/ 同一層）。
+2. 在根目錄執行：  bash agents/install.sh --only compass
+3. 自我檢查：      bash agents/selftest.sh
+4. 重開 Claude Code（在 open machine 資料夾），輸入：  /research-compass
+   它會先檢查這台機器做到哪一步，再一步一步帶你：
+   A 段（準備機器）：裝環境 → 填帳號 → 接 Telegram → 開 worker 登入 → 啟動第一次 GA → 看懂第一次的結果 → 認識專案管理
+   B 段（開始研究，四條路自由切換）：選 dataset（同步看推薦 → 語意分群）→ 認識 operator（抓自己的清單、自己定分群）→ 設計 template（沒靈感就加裝占卜家 seer_<日期>.zip）→ 調 scorer（看懂現在的 scorer、先寬後嚴）
+   全新的機器也可以直接從這裡開始（第 3 步的自我檢查在環境裝好之前會有幾項 FAIL，屬正常）。
+   地圖頁：agents/workspace/dashboard/index.html（用瀏覽器開；A 段是一條線，B 段是四條線，另有專案管理、靈感卡、dataset 圖鑑、operator 倉庫分頁）
+說明與限制見 agents/README.md。回報問題時請附 selftest.sh 的輸出，不要附 .env、session.pkl、login_time.pkl。
