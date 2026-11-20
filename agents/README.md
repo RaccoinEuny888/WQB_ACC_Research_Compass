@@ -29,12 +29,12 @@ bash agents/install.sh            # 先列清單再問一次；--only seer|inqui
                     羅盤：把一個 dataset 的欄位按經濟意義分群、每群挑代表欄位，地圖頁「dataset 圖鑑」長出這個 dataset 的卡
 /operator-classify  羅盤：教你抓自己帳號的 operator 清單 → 建議分群方式讓你決定 → 羅盤照定義把每個 operator 分進去、各寫一句用途，地圖頁長出「operator 倉庫」
 /hypothesis <方向|dataset|datafield|論文|空>
-                    占卜家：第一站 ≤3 個市場命題（可量化嗎、channel 建議）讓你選 → 第二站 文獻 ≤5 篇 → 假說 → 四關 → 自檢分數 → 建卡（有裝審判官才問要不要送審）
+                    占卜家：第一站 ≤3 個市場命題（可量化嗎、channel 建議）讓你選 → 第二站 文獻 ≤5 篇 → 假說 → 四關 → 建卡 → 有裝審判官就問要不要送審；沒裝才自檢打分（只點出偏低的那關）
 /express <card>     占卜家：挑欄位 → 四模組（清洗→訊號→平滑→組內）main / naive / 反向證偽三條 → 語法通過 → 寫 setting + idea
 python -m src.idea --idea <card>        ← 你自己執行：idea → payload → AlphaDB/pending，hash 寫回 idea；worker 送模擬
 python -m src.idea --status <card>      ← 看每條在哪一格、成績
 /judge <card> [--expr "你自己寫的式子"]
-                    審判官：白話反解釋 → 實作教條 → 用卡上預寫的 K1～K4 分析結果 → 讚美女神／懺悔後再審／處決
+                    審判官：白話反解釋 → 實作教條 → 用卡上預寫的 K1～K4 分析結果 → 讚美女神／懺悔後再審／處決（占卜家轉達時說：通過／重新占卜／拒絕）
 /templatize <card>  占卜家：結果過了審判官或 self_check.py（Sharpe>1、tvr<0.5、K1、K2）→ template（同 subgroup 才互換、每個基因位寫理由）→ 有審判官就送審 → 寫入 DB/ResearchDB/template/
 /spc universe       SPC 通道前置：ISIN|MIC 主清單（你貼回或 agent 用 WebSearch 抓）→ 審判官 Luhn／MIC／去重／反查 → DB/ResearchDB/spc/universe/
 /spc <card>         占卜家：channel 含 spc 的卡 → 切子清單（~50 檔，跟著假說切面）→ 英文 prompt（方向機械、全名單給分、格式鎖定尾註）

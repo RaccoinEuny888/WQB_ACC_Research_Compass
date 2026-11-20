@@ -126,19 +126,37 @@ HYPO_LANE = {"draft": "方向待定", "self_checked": "研究中", "under_review
              "expr_approved": "研究中", "template_approved": "模擬中", "ga_running": "模擬中"}
 
 
+def spc_submissions() -> dict[str, list[dict]]:
+    """卡號 → SPC 提交狀態（Submitted, Weight: n ／ Fail）；讀 DB/ResearchDB/spc/registry.jsonl，沒裝占卜家就是空的。"""
+    try:
+        sys.path.insert(0, str(paths.AGENTS / "hypothesis_seer" / "cli"))
+        import spc_registry  # noqa: E402
+        return spc_registry.by_card()
+    except Exception:
+        return {}
+
+
 def lanes(prog: dict, lines: list[dict]) -> list[dict]:
-    """專案管理頁：四條泳道。research_process 的研究自動進「模擬中」；占卜家的假說卡依 status 自動放；羅盤記的卡依 lane 放。"""
+    """專案管理頁：四條泳道。research_process 的研究自動進「模擬中」；占卜家的假說卡依 status 自動放；
+    SPC 已提交的卡進「結案」，只記狀態與權重；羅盤記的卡依 lane 放。"""
     cards = {l: [] for l in LANE_IDS}
     manual = prog.get("cards", [])
     manual_titles = {c["title"] for c in manual}
+    spc = spc_submissions()
     for hc in hypothesis_cards():
+        cid = str(hc.get("id"))
         lane = HYPO_LANE.get(str(hc.get("status")))
+        subs = spc.get(cid, [])
+        if subs and str(hc.get("channel")) == "spc":
+            lane = "結案"
         if not lane or hc.get("id") in manual_titles:
             continue
         conf = hc.get("confidence")
-        cards[lane].append({"title": f"{hc.get('id')}　{str(hc.get('hypothesis', ''))[:40]}", "auto": True, "kind": "hypothesis",
-                            "note": f"假說卡 · {hc.get('status')}" + (f" · 信心 {conf}/10" if conf is not None else "") + (f" · {hc.get('dataset')}" if hc.get("dataset") else ""),
-                            "at": str(hc.get("created", ""))[:10], "status": str(hc.get("status")), "card_id": str(hc.get("id"))})
+        note = f"假說卡 · {hc.get('status')}" + (f" · 信心 {conf}/10" if conf is not None else "") + (f" · {hc.get('dataset')}" if hc.get("dataset") else "")
+        if subs:
+            note += " · SPC " + "；".join(f"{s['prompt_name']}：{s['label']}" for s in subs)
+        cards[lane].append({"title": f"{cid}　{str(hc.get('hypothesis', ''))[:40]}", "auto": True, "kind": "hypothesis",
+                            "note": note, "at": str(hc.get("created", ""))[:10], "status": str(hc.get("status")), "card_id": cid})
     for c in manual:
         if c.get("lane") in cards and not c.get("done"):
             cards[c["lane"]].append({"title": c["title"], "note": c.get("note", ""), "at": c.get("added_at", "")[:10], "auto": False,

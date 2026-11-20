@@ -690,7 +690,8 @@ def _card_body(path: str) -> tuple[str, list[str]]:
     prop = re.sub(r"\s+", " ", m.group(1)).strip() if m else ""
     m = re.search(r"^# 自檢\s*\n(.*?)(?=^# |\Z)", txt, flags=re.M | re.S)
     gates = re.findall(r"^\|\s*([1-4])\s*\|\s*(\d+)\s*\|", m.group(1), flags=re.M) if m else []
-    return prop, [f"第 {k} 關 {v}" for k, v in gates]
+    # 只點出特別低的那關（≤4 分）；分數高的不用特別說
+    return prop, [f"第 {k} 關偏低（{v}）" for k, v in gates if int(v) <= 4]
 
 
 def chips_bar(gid: str, items: list[tuple[str, str, int]], total: int, search: bool) -> str:
@@ -723,6 +724,7 @@ def tab_hypothesis() -> str:
     items = [(ch, CHANNEL_LABEL[ch], counts[ch]) for ch in ("alpha", "spc", "both") if counts.get(ch)]
     if counts.get(""):
         items.append(("none", "未定", counts[""]))
+    spc = onboard.spc_submissions()
     out = []
     for c in cards:
         cid, st_ = str(c.get("id")), str(c.get("status"))
@@ -732,6 +734,11 @@ def tab_hypothesis() -> str:
         prop, gates = _card_body(str(c.get("_path", "")))
         dead = st_ in ("rejected", "abandoned", "rejected_by_seer")
         site = " ".join(str(c.get(k) or "") for k in ("region", "universe")).strip()
+        subs = spc.get(cid, [])
+        if subs:  # SPC 提交後只記狀態與權重；全部 Fail 就不再提示下一步
+            gates = gates + [f"SPC {s['prompt_name']}：{s['label']}" for s in subs]
+            if ch == "spc":
+                nxt = "—" if all(s["label"] == "Fail" for s in subs) else "定期回報平台狀態：/spc checked；持續 Failed 就把權重歸零"
         out.append(
             f'<div class="hc" id="hc-{e(cid)}" data-v="{e(ch or "none")}">'
             f'<div class="hc-top"><span class="hc-id">{e(cid)}</span><span class="pill2{" bad" if st_ == "rejected" else ""}">{e(lab)}</span>'
@@ -743,7 +750,7 @@ def tab_hypothesis() -> str:
             + f'<div class="hc-foot"><span class="ds">{e(str(c.get("dataset") or "—"))}{f"（{e(site)}）" if site else ""}</span>'
             f'<span>{f"信心 {conf}/10" if conf not in (None, "") else ""}</span><span>{e(str(c.get("created") or ""))}</span>'
             f'<span class="fn">{e(Path(str(c.get("_path", ""))).name)}</span></div></div>')
-    return (f'<p class="intro">占卜家寫的假說卡，存在 <code>DB/ResearchDB/hypothesis/</code>。信心是占卜家四關自檢的總分，由你決定要不要往下做；進行中的卡也會出現在「專案管理」的泳道上。</p>'
+    return (f'<p class="intro">占卜家寫的假說卡，存在 <code>DB/ResearchDB/hypothesis/</code>。沒裝審判官時，信心是占卜家四關自檢的總分（只點出偏低的那關）；有裝審判官就看判決。進行中的卡也會出現在「專案管理」的泳道上；SPC 提交後只記狀態與權重。</p>'
             + chips_bar("hcg", items, len(cards), True) + f'<div class="cgrid" id="hcg">{"".join(out)}</div>')
 
 
